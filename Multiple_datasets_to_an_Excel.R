@@ -1,0 +1,30 @@
+
+#####################################################################################
+
+#R function to export multiple data sets to an Excel Workbook in a single call.
+
+######################################################################################
+
+# file : the path to the output file
+# ... : a list of data to write to the workbook
+
+xlsx.writeMultipleData <- function (file, ...)
+{
+  require(xlsx, quietly = TRUE)
+  objects <- list(...)
+  fargs <- as.list(match.call(expand.dots = TRUE))
+  objnames <- as.character(fargs)[-c(1, 2)]
+  nobjects <- length(objects)
+  for (i in 1:nobjects) {
+    if (i == 1)
+      write.xlsx(objects[[i]], file, sheetName = objnames[i])
+    else write.xlsx(objects[[i]], file, sheetName = objnames[i],
+                    append = TRUE)
+  }
+}
+
+#Use the R code below to save mtcars (a data frame), Titanic (a table), AirPassengers (a time series) and state.x77 (a matrix) :
+
+xlsx.writeMultipleData("myworkbook.xlsx",mtcars, Titanic, AirPassengers, state.x77)
+
+########################################################################################
